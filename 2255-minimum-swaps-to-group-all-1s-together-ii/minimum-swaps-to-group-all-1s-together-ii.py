@@ -1,19 +1,29 @@
 class Solution:
     def minSwaps(self, nums):
-        n = len(nums)
-        ones = sum(nums)
+        k = sum(nums)      # Total number of 1's
 
-        if ones == 0 or ones == n:
+        if k == 0:
             return 0
 
-        nums = nums + nums
+        nums = nums + nums  # Make the array circular
 
-        curr = sum(nums[:ones])
-        max_ones = curr
+        count = 0
 
-        for i in range(ones, ones + n):
-            curr += nums[i]
-            curr -= nums[i - ones]
-            max_ones = max(max_ones, curr)
+        # Count 1's in the first window
+        for i in range(k):
+            if nums[i] == 1:
+                count += 1
 
-        return ones - max_ones
+        maxOnes = count
+
+        # Slide the window
+        for i in range(k, len(nums)):
+            if nums[i] == 1:
+                count += 1
+            if nums[i - k] == 1:
+                count -= 1
+
+            if count > maxOnes:
+                maxOnes = count
+
+        return k - maxOnes
